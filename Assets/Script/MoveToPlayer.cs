@@ -2,19 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Move_Cube : MonoBehaviour
+public class MoveToPlayer : MonoBehaviour
 {
+    Transform _player; 
     // Start is called before the first frame update
     void Start()
     {
-        Transform trans = transform.GetChild(0).GetComponent<Transform>();
-        trans.position = GameObject.Find("MovePoint").GetComponent<Transform>().position;
-
+        _player= GameObject.Find("Player").transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+        transform.position = Vector3.MoveTowards(_player.transform, 2 * Time.deltaTime);
     }
 }

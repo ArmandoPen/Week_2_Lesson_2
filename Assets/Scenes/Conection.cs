@@ -5,16 +5,36 @@ using UnityEngine;
 public class Conection : MonoBehaviour
 {
     // Start is called before the first frame update
-    
+    public float x = 1;
+    public float z = 1;
+    private CharacterController _characterController;
+    private Camera _camera;
+
     void Start()
     {
-        
+        _characterController = GetComponent<CharacterController>();
+        _camera = transform.GetChild(0).GetComponent<Camera>();
     }
 
     // Update is called once per frame
     void Update()
-    { 
-        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        transform.position += movement;
+    {
+        float time = Time.deltaTime;
+        Vector3 move = new Vector3(x * Input.GetAxis("Horizontal") * time, 0, z * Input.GetAxis("Vertical") * time);
+        _characterController.Move(transform.TransformDirection(move));
+        _characterController.Move(move);
+
+        transform.Rotate(0, Input.GetAxis("Mouse X"), 0);
+
+        _camera.transform.Rotate(Input.GetAxis("Mouse Y"), 0, 0);
+        if(_camera.transform.eulerAngles.x >= 0)
+        {
+            _camera.transform.eulerAngles = new Vector3(Mathf.Clamp(_camera.transform.eulerAngles.x -360, -30, 0), _camera.transform.eulerAngles.y, 0);
+
+        }
+        else
+        {
+            _camera.transform.eulerAngles = new Vector3(Mathf.Clamp(_camera.transform.eulerAngles.x, 0, 45), _camera.transform.eulerAngles.y, 0);
+        }
     }
 }
